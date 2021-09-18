@@ -1,0 +1,23 @@
+{
+  "name": "quiz_service",
+  "version": "1.0.0",
+  "description": "Quiz service for lifeandmoney",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brenobrandao2/quiz-service.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/brenobrandao2/quiz-service/issues"
+  },
+  "homepage": "https://github.com/brenobrandao2/quiz-service#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mysql": "^2.18.1"
+  }
+}
