@@ -18,3 +18,5 @@ export class MongoDb {
         return db
     }
 }
+
+const db = new MongoDb().newConnection()
