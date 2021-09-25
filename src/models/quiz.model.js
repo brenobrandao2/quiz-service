@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const { MongoDb } = require('../utils/mongodb');
+import mongoose from "mongoose";
+import { MongoDb } from '../utils/mongodb.js'
 const Schema = mongoose.Schema
 
 const db = new MongoDb()
@@ -15,7 +15,7 @@ const QuizSchema = new Schema({
 
 const quizCollection = mongoose.model('quiz', QuizSchema);
 
-module.exports={
+export default {
     createData: (inputData, callback) => {
         quizData = new quizCollection(inputData)
         quizData.save( (err, data) => {
