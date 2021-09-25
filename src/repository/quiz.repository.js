@@ -1,3 +1,8 @@
+import MongoDb from '../utils/mongodb.js'
+
+const QUIZ_COLLECTION = 'quiz'
+const db = new MongoDb()
+
 export const getAll = (conn) => {
     return new Promise((resolve, reject) => {
         conn.query('SELECT * FROM quiz;', (err, results) => {
@@ -25,12 +30,22 @@ export const deleteById = (conn, id) => {
     })
 }
 
-export const insert = (conn, nome, titulo, subtitulo) => {
-    return new Promise((resolve, reject) => {
-        conn.query(`INSERT INTO quiz (nome, titulo, subtitulo) VALUES ("${nome}", "${titulo}", "${subtitulo}");`, (err, results) => {
-            if (err) reject(err)
-            resolve(results)
-        })
+// export const insert = (conn, nome, titulo, subtitulo) => {
+//     return new Promise((resolve, reject) => {
+//         conn.query(`INSERT INTO quiz (nome, titulo, subtitulo) VALUES ("${nome}", "${titulo}", "${subtitulo}");`, (err, results) => {
+//             if (err) reject(err)
+//             resolve(results)
+//         })
+//     })
+// }
+
+export const insert = async (quiz) => {
+    const conn = db.newConnection()
+    const collection = conn.collection(QUIZ_COLLECTION)
+    await collection.insertOne(quiz).then((result) => {
+        console.log(result)
+        conn.close()
+        return result
     })
 }
 

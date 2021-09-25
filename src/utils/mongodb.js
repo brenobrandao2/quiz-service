@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export class MongoDb {
+export default class MongoDb {
     constructor() {
         this.uri = 'mongodb://localhost/life_and_money_quiz'
         this.options =  { useNewUrlParser: true }
