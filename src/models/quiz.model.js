@@ -4,6 +4,11 @@ const Schema = mongoose.Schema
 
 const db = new MongoDb()
 const conn = db.newConnection()
+const collection = conn.collection('quiz')
+
+export const insertQuiz = async (quiz) => {
+    return await collection.insertOne(quiz)
+}
 
 const QuizSchema = new Schema({
     nome: String,

@@ -1,7 +1,7 @@
 import { Router } from "express"
 import Db from '../utils/db.js';
 // import * as Quiz from '../../src/repository/quiz.repository.js'
-import Quiz from '../models/quiz.model.js'
+import Quiz, { insertQuiz } from '../models/quiz.model.js'
 
 const router = Router()
 
@@ -64,13 +64,14 @@ const router = Router()
 router.post('/insertQuizTest', async (req, res) => {
     try {
         const quiz = req.body
-
-        Quiz.createData(quiz, (data) => {
-            res.json({ 
-                message: 'Quiz registrado com sucesso',
-                data
-            })
-        })
+        const result = await insertQuiz(quiz)
+        res.json({ result })
+        // Quiz.createData(quiz, (data) => {
+        //     res.json({ 
+        //         message: 'Quiz registrado com sucesso',
+        //         data
+        //     })
+        // })
         
         // const db = new Db()
         // const conn = db.newConnection()
