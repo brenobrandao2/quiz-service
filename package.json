@@ -17,8 +17,10 @@
   },
   "homepage": "https://github.com/brenobrandao2/quiz-service#readme",
   "dependencies": {
+    "cross-fetch": "^3.1.4",
     "express": "^4.17.1",
     "mongoose": "^6.0.7",
+    "multer": "^1.4.3",
     "mysql": "^2.18.1"
   },
   "type": "module"

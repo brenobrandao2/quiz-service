@@ -1,8 +1,10 @@
 import { Router } from "express"
-import { insert, getAll, update, getById, deleteById } from "../repository/quiz.repository.js"
+import { insert, getAll, update, getById, deleteById, getCardFinalImg } from "../repository/quiz.repository.js"
 import MongoDb from "../utils/mongodb.js"
+import multer from "multer"
 
 const router = Router()
+const upload = multer()
 
 // router.get('/', async (req, res) => {
 //     try {
@@ -32,6 +34,7 @@ router.post('/getById', async (req, res) => {
         const { key } = req.body || req.query
         const _id = key
         const quiz = await getById(_id)
+
         res.send(quiz)
     } catch (error) {
         console.log(error)
@@ -65,10 +68,24 @@ router.post('/deleteById', async (req, res) => {
 //     }
 // })
 
-router.post('/insert', async (req, res) => {
+router.post('/insert', upload.any(), async (req, res) => {
     try {
-        const quiz = req.body
-        const result = await insert(quiz)
+        const { quiz } = req.body
+        const newQuiz = JSON.parse(quiz)
+        const formData = req.files
+        let quizImagem, cardFinalImagem
+        
+        if (formData && formData.length > 0) {
+            quizImagem = formData.find(item => item.fieldname === 'quizImagem')
+            cardFinalImagem = formData.find(item => item.fieldname === 'cardFinalImagem')
+        }
+
+        newQuiz.imagem = quizImagem
+        newQuiz.cardFinal.imagem = cardFinalImagem
+
+        console.log(newQuiz)
+
+        const result = await insert(newQuiz)
         res.json({ result })
     } catch (error) {
         console.log(error)
@@ -76,10 +93,26 @@ router.post('/insert', async (req, res) => {
     }
 })
 
-router.post('/update', async (req, res) => {
+router.post('/update', upload.any(), async (req, res) => {
     try {
-        const quiz = req.body
-        const result = await update(quiz)
+        const { quiz } = req.body
+        const newQuiz = JSON.parse(quiz)
+        const formData = req.files
+        let quizImagem, cardFinalImagem
+        
+        if (formData && formData.length > 0) {
+            quizImagem = formData.find(item => item.fieldname === 'quizImagem')
+            cardFinalImagem = formData.find(item => item.fieldname === 'cardFinalImagem')
+        }
+
+        if (quizImagem)
+            newQuiz.imagem = quizImagem
+        if (cardFinalImagem)
+            newQuiz.cardFinal.imagem = cardFinalImagem
+        else 
+            newQuiz.cardFinal.imagem = await getCardFinalImg(newQuiz._id)
+
+        const result = await update(newQuiz)
         res.json({ result })
     } catch (error) {
         console.log(error)
