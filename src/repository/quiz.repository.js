@@ -191,7 +191,7 @@ export const getToken = async (_id) => {
                         reject(error)
                     } else {
                         console.log('Sucesso ao buscar token do quiz')
-                        const token = result[0]?.token
+                        const token = result[0].token
                         resolve(token)
                     }
                     db.close()
