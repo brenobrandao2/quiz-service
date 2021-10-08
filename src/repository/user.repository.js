@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 import MongoDb from '../utils/mongodb.js'
 
-const USERS_COLLECTION = 'usuarios'
+const USERS_COLLECTION = 'usuario'
 const db = new MongoDb()
 
 export const insert = (user) => {
