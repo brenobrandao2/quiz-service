@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export default class MongoDb {
     constructor() {
-        this.uri = 'mongodb://lam_quiz:HndC$1087Lam%402020a@137.184.132.242/life_and_money_quiz'
+        this.uri = 'mongodb://lam_quiz:HndC$1087Lam%402020a@159.203.187.163/life_and_money_quiz'
         this.options =  { useNewUrlParser: true }
         this.mongo = new mongoose.Mongoose(({ uri: this.uri, options: this.options}))
     }
