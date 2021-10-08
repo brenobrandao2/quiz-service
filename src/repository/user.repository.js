@@ -12,7 +12,6 @@ export const insert = (user) => {
                 return reject(error)
             
             user.createdAt = new Date()
-            const passwordHash = new PasswordHash();
 
             db.collection(USERS_COLLECTION).insertOne(user).then((result) => {
                 console.log('Sucesso ao registrar usuário')
