@@ -95,22 +95,18 @@ router.post('/insert', upload.any(), async (req, res) => {
 
 router.post('/update', upload.any(), async (req, res) => {
     try {
-        const { quiz } = req.body
+        const body = JSON.parse(JSON.stringify(req.body))
+        const { quiz } = body
         const newQuiz = JSON.parse(quiz)
         const formData = req.files
-        let quizImagem, cardFinalImagem
+        let quizImagem = formData.find(item => item.fieldname === 'quizImagem')
+        let cardFinalImagem = formData.find(item => item.fieldname === 'cardFinalImagem')
         
-        if (formData && formData.length > 0) {
-            quizImagem = formData.find(item => item.fieldname === 'quizImagem')
-            cardFinalImagem = formData.find(item => item.fieldname === 'cardFinalImagem')
-        }
-
-        if (quizImagem)
-            newQuiz.imagem = quizImagem
-        if (cardFinalImagem)
-            newQuiz.cardFinal.imagem = cardFinalImagem
-        else 
-            newQuiz.cardFinal.imagem = await getCardFinalImg(newQuiz._id)
+        if (quizImagem) newQuiz.imagem = formData.find(item => item.fieldname === 'quizImagem')
+        else if (!body.hasOwnProperty('quizImagem')) newQuiz.imagem = undefined
+        if (cardFinalImagem) newQuiz.cardFinal.imagem = formData.find(item => item.fieldname === 'cardFinalImagem')
+        else if (body.hasOwnProperty('cardFinalImagem')) newQuiz.cardFinal.imagem = await getCardFinalImg(newQuiz._id)
+        else newQuiz.cardFinal.imagem = undefined
 
         const result = await update(newQuiz)
         res.json({ result })

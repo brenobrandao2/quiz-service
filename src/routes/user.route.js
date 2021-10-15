@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { insert, getAll, update, deleteById, login } from "../repository/user.repository.js"
+import { insert, getAll, update, deleteById, login, checkPassword } from "../repository/user.repository.js"
 
 const router = Router()
 
@@ -50,6 +50,17 @@ router.post('/login', async (req, res) => {
     try {
         const {email, senha} = req.body
         const result = await login(email, senha)
+        res.json({ ...result })
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.post('/checkPassword', async (req, res) => {
+    try {
+        const {email, senha} = req.body
+        const result = await checkPassword(email, senha)
         res.json({ ...result })
     } catch (error) {
         console.log(error)

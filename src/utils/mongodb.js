@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
+import { server } from '../utils/baseUrls.js'
 
 export default class MongoDb {
     constructor() {
-        this.uri = 'mongodb://localhost/life_and_money_quiz'
-        this.options =  { user: 'lam_quiz', pass: 'HndC$1087Lam@2020a', useNewUrlParser: true }
+        this.user = 'lam_quiz'
+        this.pass = 'HndC$1087Lam%402020a'
+        this.uri = `mongodb://${this.user}:${this.pass}@${server}/life_and_money_quiz`
+        this.options =  { user: this.user, pass: this.pass, useNewUrlParser: true }
         this.mongo = new mongoose.Mongoose(({ uri: this.uri, options: this.options}))
     }
 

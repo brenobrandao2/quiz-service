@@ -20,7 +20,7 @@ export const getAll = () => {
             if (error)
                 return reject(error)
             
-            db.collection(QUIZ_COLLECTION).find({}).sort({ 'lastModified': -1 }) .toArray((error, result) => {  
+            db.collection(QUIZ_COLLECTION).find({}).sort({ 'lastModified': -1 }).toArray((error, result) => {  
                 if (error) {
                     console.log('Falha ao buscar todos os quiz')   
                     reject(error)

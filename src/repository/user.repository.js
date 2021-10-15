@@ -1,5 +1,6 @@
 import mongoose from 'mongoose'
 import MongoDb from '../utils/mongodb.js'
+import bcrypt from 'bcrypt'
 
 const USERS_COLLECTION = 'usuario'
 const db = new MongoDb()
@@ -11,16 +12,25 @@ export const insert = (user) => {
             if (error)
                 return reject(error)
             
-            user.createdAt = new Date()
+            const saltRound = 10
+            bcrypt.hash(user.senha, saltRound, (error, hash) => {
+                if (error) {
+                    db.close()
+                    return reject(error)
+                }
 
-            db.collection(USERS_COLLECTION).insertOne(user).then((result) => {
-                console.log('Sucesso ao registrar usuário')
-                resolve(result)
-                db.close()
-            }).catch((error) => {
-                console.log('Falha ao registrar usuário')
-                reject(error)
-                db.close()
+                user.senha = hash
+                user.createdAt = new Date()
+
+                db.collection(USERS_COLLECTION).insertOne(user).then((result) => {
+                    console.log('Sucesso ao registrar usuário')
+                    resolve(result)
+                    db.close()
+                }).catch((error) => {
+                    console.log('Falha ao registrar usuário')
+                    reject(error)
+                    db.close()
+                })
             })
         })
     })
@@ -33,7 +43,7 @@ export const getAll = () => {
             if (error)
                 return reject(error)
             
-            db.collection(USERS_COLLECTION).find({}).toArray((error, result) => {  
+            db.collection(USERS_COLLECTION).find({}).sort({ 'nome': 1 }).toArray((error, result) => {  
                 if (error) {
                     console.log('Falha ao buscar todos os usuários')   
                     reject(error)
@@ -59,15 +69,26 @@ export const update = async (user) => {
             if (error)
                 return reject(error)
 
-            db.collection(USERS_COLLECTION).updateOne({ "_id": objectId }, { $set: user, $currentDate: { lastModified: true } }).then((result) => {
-                console.log('Sucesso ao atualizar usuário')
-                resolve(result)
-                db.close()
-            }).catch((error) => {
-                console.log('Falha ao atualizar usuário')
-                reject(error)
-                db.close()
+            const saltRound = 10
+            bcrypt.hash(user.senha, saltRound, (error, hash) => {
+                if (error) {
+                    db.close()
+                    return reject(error)
+                }
+
+                user.senha = hash
+
+                db.collection(USERS_COLLECTION).updateOne({ "_id": objectId }, { $set: user, $currentDate: { lastModified: true } }).then((result) => {
+                    console.log('Sucesso ao atualizar usuário')
+                    resolve(result)
+                    db.close()
+                }).catch((error) => {
+                    console.log('Falha ao atualizar usuário')
+                    reject(error)
+                    db.close()
+                })
             })
+
         })
     })    
 }
@@ -102,12 +123,72 @@ export const login = (email, senha) => {
             
             db.collection(USERS_COLLECTION).find({ "email": email }).toArray((error, result) => {  
                 if (error) {
+
                     console.log('Falha ao buscar usuário')   
                     reject(error)
+
                 } else {
-                    if (result.length > 0 && result[0].senha === senha)
-                        resolve({status: true, user: result[0]})
-                    else reject({status: false})
+                    const user = result[0] 
+                    console.log(user)
+                    bcrypt.compare(senha, user?.senha, (error, result) => {
+                        if (error) {
+                            console.log('Falha ao buscar usuário')   
+                            reject(error)
+
+                        } else {
+                            if (result) {
+                                console.log('Autenticado com sucesso')
+                                resolve({status: true, user: user})
+                            }
+                            else {
+                                console.log('Senha incorreta')   
+                                reject({status: false})
+                            }
+
+                        }
+
+                    })
+                }
+                db.close()
+              })
+        })
+    })
+}
+
+export const checkPassword = (email, senha) => {
+    return new Promise((resolve, reject) => {
+        console.log('Buscando usuário')
+        db.mongo.connect(db.uri, (error, db) => {
+            if (error)
+                return reject(error)
+            
+            db.collection(USERS_COLLECTION).find({ "email": email }).toArray((error, result) => {  
+                if (error) {
+
+                    console.log('Falha ao buscar usuário')
+                    reject(error)
+
+                } else {
+                    const user = result[0] 
+                    console.log(user)
+                    bcrypt.compare(senha, user?.senha, (error, result) => {
+                        if (error) {
+                            console.log('Falha ao buscar usuário')   
+                            reject(error)
+
+                        } else {
+                            if (result) {
+                                console.log('Autenticado com sucesso')
+                                resolve({status: true})
+                            }
+                            else {
+                                console.log('Senha incorreta')   
+                                reject({status: false})
+                            }
+
+                        }
+
+                    })
                 }
                 db.close()
               })
