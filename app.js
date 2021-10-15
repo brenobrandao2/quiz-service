@@ -4,8 +4,8 @@ import userRouter from './src/routes/user.route.js'
 import https from 'https'
 import fs from 'fs'
 
-const privateKey = fs.readFileSync('sslcert/server.key', 'utf-8')
-const certificate = fs.readFileSync('sslcert/server.crt', 'utf-8')
+const privateKey = fs.readFileSync('./sslcert/key.pem')
+const certificate = fs.readFileSync('./sslcert/cert.pem')
 
 const credentials = {
     key: privateKey,
@@ -29,4 +29,4 @@ app.use('/user', userRouter)
 // app.listen(3001)
 
 const httpsServer = https.createServer(credentials, app)
-httpsServer.listen(3001)
+httpsServer.listen(8443)
