@@ -4,15 +4,6 @@ import MongoDb from '../utils/mongodb.js'
 const QUIZ_COLLECTION = 'quiz'
 const db = new MongoDb()
 
-// export const getAll = (conn) => {
-//     return new Promise((resolve, reject) => {
-//         conn.query('SELECT * FROM quiz;', (err, results) => {
-//             if (err) reject(err)
-//             resolve(results)
-//         })
-//     })    
-// }
-
 export const getAll = () => {
     return new Promise((resolve, reject) => {
         console.log('Buscando todos os quiz')
@@ -34,14 +25,26 @@ export const getAll = () => {
     })
 }
 
-// export const getById = (conn, id) => {
-//     return new Promise((resolve, reject) => {
-//         conn.query(`SELECT * FROM quiz WHERE id = ${id};`, (err, results) => {
-//             if (err) reject(err)
-//             resolve(results)
-//         })
-//     })    
-// }
+export const getSimpleList = () => {
+    return new Promise((resolve, reject) => {
+        console.log('Buscando todos os quiz reduzidos')
+        db.mongo.connect(db.uri, (error, db) => {
+            if (error)
+                return reject(error)
+            
+            db.collection(QUIZ_COLLECTION).find({}, { projection: {'nome': 1, 'lastModified': 1} }).sort({ 'lastModified': -1 }).toArray((error, result) => {  
+                if (error) {
+                    console.log('Falha ao buscar todos os quiz reduzidos')   
+                    reject(error)
+                } else {
+                    console.log('Sucesso ao buscar todos os quiz reduzidos')
+                    resolve(result)
+                }
+                db.close()
+              })
+        })
+    })
+}
 
 export const getById = (_id) => {
     return new Promise((resolve, reject) => {
@@ -79,15 +82,6 @@ export const getCardFinalImg = async (_id) => {
     }
 }
 
-// export const deleteById = (conn, id) => {
-//     return new Promise((resolve, reject) => {
-//         conn.query(`DELETE FROM quiz WHERE id = ${id};`, (err, results) => {
-//             if (err) reject(err)
-//             resolve(results)
-//         })
-//     })
-// }
-
 export const deleteById = (_id) => {
     return new Promise((resolve, reject) => {
         console.log('Deletando quiz por id')
@@ -108,15 +102,6 @@ export const deleteById = (_id) => {
         })
     })  
 }
-
-// export const insert = (conn, nome, titulo, subtitulo) => {
-//     return new Promise((resolve, reject) => {
-//         conn.query(`INSERT INTO quiz (nome, titulo, subtitulo) VALUES ("${nome}", "${titulo}", "${subtitulo}");`, (err, results) => {
-//             if (err) reject(err)
-//             resolve(results)
-//         })
-//     })
-// }
 
 export const insert = (quiz) => {
     return new Promise((resolve, reject) => {
@@ -165,12 +150,3 @@ export const update = async (quiz) => {
         })
     })    
 }
-
-// export const insertQuizTest = (conn, id) => {
-//     return new Promise((resolve, reject) => {
-//         conn.query(`INSERT INTO quiz (nome, titulo, subtitulo) VALUES ("Quiz de teste", "Título do quiz de teste", "Subtítulo do quiz de teste");`, (err, results) => {
-//             if (err) reject(err)
-//             resolve(results)
-//         })
-//     })
-// }

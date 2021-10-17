@@ -1,27 +1,23 @@
 import { Router } from "express"
-import { insert, getAll, update, getById, deleteById, getCardFinalImg } from "../repository/quiz.repository.js"
-import MongoDb from "../utils/mongodb.js"
+import { insert, getAll, update, getById, deleteById, getCardFinalImg, getSimpleList } from "../repository/quiz.repository.js"
 import multer from "multer"
 
 const router = Router()
 const upload = multer()
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const db = new Db()
-//         const conn = db.newConnection()
-//         const allQuiz = await Quiz.getAll(conn)
-//         conn.end()
-//         res.send(allQuiz)
-//     } catch (error) {
-//         console.log(error)
-//         res.send(error)
-//     }
-// })
-
 router.get('/', async (req, res) => {
     try {
         const allQuiz = await getAll()
+        res.send(allQuiz)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.get('/getSimpleList', async (req, res) => {
+    try {
+        const allQuiz = await getSimpleList()
         res.send(allQuiz)
     } catch (error) {
         console.log(error)
@@ -52,21 +48,6 @@ router.post('/deleteById', async (req, res) => {
         res.send(error)
     }
 })
-
-// router.post('/insertQuiz', async (req, res) => {
-//     try {
-//         const {nome, titulo, subtitulo, perguntas, cardFinal} = req.body
-//         console.log(req.body)
-//         const db = new Db()
-//         const conn = db.newConnection()
-//         // const result = await Quiz.insert(conn, nome, titulo, subtitulo)
-//         conn.end()
-//         res.send(result)
-//     } catch (error) {
-//         console.log(error)
-//         res.send(error)
-//     }
-// })
 
 router.post('/insert', upload.any(), async (req, res) => {
     try {
