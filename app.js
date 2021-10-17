@@ -1,16 +1,6 @@
 import express from 'express'
 import quizRouter from './src/routes/quiz.route.js'
 import userRouter from './src/routes/user.route.js'
-import https from 'https'
-import fs from 'fs'
-
-const privateKey = fs.readFileSync('./sslcert/key.pem')
-const certificate = fs.readFileSync('./sslcert/cert.pem')
-
-const credentials = {
-    key: privateKey,
-    cert: certificate    
-}
 
 const app = express()
 
@@ -26,7 +16,4 @@ app.use(function(req, res, next) {
 app.use('/quiz', quizRouter)
 app.use('/user', userRouter)
 
-// app.listen(3001)
-
-const httpsServer = https.createServer(credentials, app)
-httpsServer.listen(8443)
+app.listen(3001)
