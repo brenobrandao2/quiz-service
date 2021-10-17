@@ -5,7 +5,7 @@ export default class MongoDb {
     constructor() {
         this.user = 'lam_quiz'
         this.pass = 'HndC$1087Lam%402020a'
-        this.uri = `mongodb://${this.user}:${this.pass}@${server}/life_and_money_quiz`
+        this.uri = `mongodb://${this.user}:${this.pass}@${server}/life_and_money_quiz?authSource=admin&w=1`
         this.options =  { user: this.user, pass: this.pass, useNewUrlParser: true }
         this.mongo = new mongoose.Mongoose(({ uri: this.uri, options: this.options}))
     }
