@@ -1,5 +1,5 @@
 import fetch from "cross-fetch";
-export const getAllLists = async (token) => {
+export const getAllLists = async (apiUrl, token) => {
     const opt = {
         method: 'GET',
         headers: {
@@ -8,7 +8,7 @@ export const getAllLists = async (token) => {
         },
     }
     
-    const allLists = await fetch('https://lifeandmoney.api-us1.com/api/3/lists', opt)
+    const allLists = await fetch(`${apiUrl}/api/3/lists`, opt)
     .then(res => res.json())
     .catch(err => console.error('error:' + err));
 

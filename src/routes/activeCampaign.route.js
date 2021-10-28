@@ -5,8 +5,9 @@ const router = Router()
 
 router.post('/getLists', async (req, res) => {
     try {
+        const apiUrl = req.body.apiUrl || ''
         const token = req.body.token || ''
-        const allLists = await getAllLists(token)
+        const allLists = await getAllLists(apiUrl, token)
         res.send(allLists)
     } catch (error) {
         console.log(error)
