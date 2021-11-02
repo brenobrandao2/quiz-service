@@ -1,6 +1,7 @@
 import { Router } from "express"
 import { insert, getAll, update, getById, deleteById, getCardFinalImg, getSimpleList } from "../repository/quiz.repository.js"
 import multer from "multer"
+import { getQuizMetrics } from "../repository/metric.repository.js"
 
 const router = Router()
 const upload = multer()
@@ -91,6 +92,18 @@ router.post('/update', upload.any(), async (req, res) => {
 
         const result = await update(newQuiz)
         res.json({ result })
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.post('/getQuizMetrics', async (req, res) => {
+    try {
+        const { _id } = req.body || req.query
+        const quizMetrics = await getQuizMetrics(_id)
+
+        res.send(quizMetrics)
     } catch (error) {
         console.log(error)
         res.send(error)
