@@ -1,5 +1,5 @@
 import { Router } from "express"
-import { insert, getAll, update, getById, deleteById, getCardFinalImg, getSimpleList } from "../repository/quiz.repository.js"
+import { insert, getAll, update, getById, deleteById, getCardFinalImg, getSimpleList, insertLogo, insertFavicon, getImages } from "../repository/quiz.repository.js"
 import multer from "multer"
 import { getQuizMetrics } from "../repository/metric.repository.js"
 
@@ -75,6 +75,7 @@ router.post('/insert', upload.any(), async (req, res) => {
     }
 })
 
+
 router.post('/update', upload.any(), async (req, res) => {
     try {
         const body = JSON.parse(JSON.stringify(req.body))
@@ -104,6 +105,51 @@ router.post('/getQuizMetrics', async (req, res) => {
         const quizMetrics = await getQuizMetrics(_id)
 
         res.send(quizMetrics)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.get('/getImages', async (req, res) => {
+    try {
+        const allImages = await getImages()
+        res.send(allImages)
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
+
+router.post('/insertImage', upload.any(), async (req, res) => {
+    try {
+        const formData = req.files
+        let logo, favicon
+        const result = []
+        
+        logo = formData.find(item => item.fieldname === 'logo')
+        favicon = formData.find(item => item.fieldname === 'favicon')
+        
+        if (logo) {
+            const objLogo = {
+                tipo: 'logo',
+                logo
+            }
+            const resultLogo = await insertLogo(objLogo)
+            result.push(resultLogo)
+        }
+
+        if (favicon) {
+            const objFavicon = {
+                tipo: 'favicon',
+                favicon
+            }
+            const resultFavicon = await insertFavicon(objFavicon)
+            result.push(resultFavicon)
+        }
+
+
+        res.json({ result })
     } catch (error) {
         console.log(error)
         res.send(error)

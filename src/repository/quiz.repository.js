@@ -2,6 +2,7 @@ import mongoose from 'mongoose'
 import MongoDb from '../utils/mongodb.js'
 
 const QUIZ_COLLECTION = 'quiz'
+const IMAGES_COLLECTION = 'quiz_images'
 const db = new MongoDb()
 
 export const getAll = () => {
@@ -148,5 +149,68 @@ export const update = async (quiz) => {
                 db.close()
             })
         })
-    })    
+    })
+}
+
+export const getImages = () => {
+    return new Promise((resolve, reject) => {
+        console.log('Buscando todas as imagens')
+        db.mongo.connect(db.uri, (error, db) => {
+            if (error)
+                return reject(error)
+            
+            db.collection(IMAGES_COLLECTION).find({}).toArray((error, result) => {  
+                if (error) {
+                    console.log('Falha ao buscar todas as imagens')   
+                    reject(error)
+                } else {
+                    console.log('Sucesso ao buscar todas as imagens')
+                    resolve(result)
+                }
+                db.close()
+              })
+        })
+    })
+}
+
+export const insertLogo = async (logo) => {
+    return new Promise((resolve, reject) => {
+        console.log('Atualizando logo')
+
+        db.mongo.connect(db.uri, (error, db) => {
+            if (error)
+                return reject(error)
+
+            db.collection(IMAGES_COLLECTION).updateOne({ "tipo": 'logo' }, { $set: {...logo}, $currentDate: { lastModified: true } }, { upsert: true }).then((result) => {
+                console.log('Sucesso ao atualizar logo')
+                resolve(result)
+                db.close()
+            }).catch((error) => {
+                console.log('Falha ao atualizar logo')
+                reject(error)
+                db.close()
+            })
+        })
+    })
+}
+
+export const insertFavicon = async (favicon) => {
+    return new Promise((resolve, reject) => {
+        console.log('Atualizando favicon')
+
+        db.mongo.connect(db.uri, (error, db) => {
+            if (error)
+                return reject(error)
+
+            db.collection(IMAGES_COLLECTION).updateOne({ "tipo": 'favicon' }, { $set: {...favicon}, $currentDate: { lastModified: true } }, { upsert: true }).then((result) => {
+                console.log('Sucesso ao atualizar favicon')
+                resolve(result)
+                db.close()
+            }).catch((error) => {
+                console.log('Falha ao atualizar favicon')
+                reject(error)
+                db.close()
+            })
+        })
+    })
 }
