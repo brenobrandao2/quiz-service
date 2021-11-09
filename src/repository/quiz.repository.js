@@ -20,7 +20,7 @@ export const getAll = () => {
                     console.log('Sucesso ao buscar todos os quiz')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -41,7 +41,7 @@ export const getSimpleList = () => {
                     console.log('Sucesso ao buscar todos os quiz reduzidos')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -64,7 +64,7 @@ export const getById = (_id) => {
                     console.log('Sucesso ao buscar o quiz')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -94,11 +94,11 @@ export const deleteById = (_id) => {
             db.collection(QUIZ_COLLECTION).deleteOne({ "_id": objectId }).then((result) => {
                 console.log('Sucesso ao deletar quiz')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao deletar quiz')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })  
@@ -117,11 +117,11 @@ export const insert = (quiz) => {
             db.collection(QUIZ_COLLECTION).insertOne(quiz).then((result) => {
                 console.log('Sucesso ao registrar quiz')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao registrar quiz')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })
@@ -142,11 +142,11 @@ export const update = async (quiz) => {
             db.collection(QUIZ_COLLECTION).updateOne({ "_id": objectId }, { $set: {...quiz}, $currentDate: { lastModified: true } }).then((result) => {
                 console.log('Sucesso ao atualizar quiz')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao atualizar quiz')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })
@@ -167,7 +167,7 @@ export const getImages = () => {
                     console.log('Sucesso ao buscar todas as imagens')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -184,11 +184,11 @@ export const insertLogo = async (logo) => {
             db.collection(IMAGES_COLLECTION).updateOne({ "tipo": 'logo' }, { $set: {...logo}, $currentDate: { lastModified: true } }, { upsert: true }).then((result) => {
                 console.log('Sucesso ao atualizar logo')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao atualizar logo')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })
@@ -205,11 +205,11 @@ export const insertFavicon = async (favicon) => {
             db.collection(IMAGES_COLLECTION).updateOne({ "tipo": 'favicon' }, { $set: {...favicon}, $currentDate: { lastModified: true } }, { upsert: true }).then((result) => {
                 console.log('Sucesso ao atualizar favicon')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao atualizar favicon')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })

@@ -15,7 +15,7 @@ export const insert = (user) => {
             const saltRound = 10
             bcrypt.hash(user.senha, saltRound, (error, hash) => {
                 if (error) {
-                    db.close()
+                    // db.close()
                     return reject(error)
                 }
 
@@ -25,11 +25,11 @@ export const insert = (user) => {
                 db.collection(USERS_COLLECTION).insertOne(user).then((result) => {
                     console.log('Sucesso ao registrar usuário')
                     resolve(result)
-                    db.close()
+                    // db.close()
                 }).catch((error) => {
                     console.log('Falha ao registrar usuário')
                     reject(error)
-                    db.close()
+                    // db.close()
                 })
             })
         })
@@ -51,7 +51,7 @@ export const getAll = () => {
                     console.log('Sucesso ao buscar todos os usuários')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -72,7 +72,7 @@ export const update = async (user) => {
             const saltRound = 10
             bcrypt.hash(user.senha, saltRound, (error, hash) => {
                 if (error) {
-                    db.close()
+                    // db.close()
                     return reject(error)
                 }
 
@@ -81,11 +81,11 @@ export const update = async (user) => {
                 db.collection(USERS_COLLECTION).updateOne({ "_id": objectId }, { $set: user, $currentDate: { lastModified: true } }).then((result) => {
                     console.log('Sucesso ao atualizar usuário')
                     resolve(result)
-                    db.close()
+                    // db.close()
                 }).catch((error) => {
                     console.log('Falha ao atualizar usuário')
                     reject(error)
-                    db.close()
+                    // db.close()
                 })
             })
 
@@ -104,11 +104,11 @@ export const deleteById = (_id) => {
             db.collection(USERS_COLLECTION).deleteOne({ "_id": objectId }).then((result) => {
                 console.log('Sucesso ao deletar usuário')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao deletar usuário')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })  
@@ -149,7 +149,7 @@ export const login = (email, senha) => {
 
                     })
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -190,7 +190,7 @@ export const checkPassword = (email, senha) => {
 
                     })
                 }
-                db.close()
+                // db.close()
               })
         })
     })

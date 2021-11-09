@@ -21,7 +21,7 @@ export const getQuizMetrics = (_id) => {
                     console.log('Sucesso ao buscar métricas')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })

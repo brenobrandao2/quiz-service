@@ -19,7 +19,7 @@ export const getAll = () => {
                     console.log('Sucesso ao buscar todos os logs')
                     resolve(result)
                 }
-                db.close()
+                // db.close()
               })
         })
     })
@@ -39,16 +39,14 @@ export const registerLog = async (data, usuario, descricao, detalhes) => {
                     detalhes
                 }
                 
-                console.log(log)
-                
             db.collection(LOG_COLLECTION).insertOne(log).then((result) => {
                 console.log('Sucesso ao registrar log')
                 resolve(result)
-                db.close()
+                // db.close()
             }).catch((error) => {
                 console.log('Falha ao registrar log')
                 reject(error)
-                db.close()
+                // db.close()
             })
         })
     })
